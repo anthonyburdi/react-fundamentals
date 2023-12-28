@@ -6,19 +6,99 @@
   <script src="https://unpkg.com/react@18.1.0/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18.1.0/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7.12.4/babel.js"></script>
+  <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
+
   <script type="text/babel">
     // 🐨 Make a function called `message` which returns the JSX we want to share
 
     // 🐨 use that function in place of the divs below with:
     // 💰 {message({children: 'Hello World'})} {message({children: 'Goodbye World'})}
+    // Exercise:
+    // function message(children) {
+    //   return <div className="message">{children}</div>
+    // }
+    // const element = (
+    //   <div className="container">
+    //     {message("Hello World")}
+    //     {message("Goodbye World")}
+    //   </div>
+    // )
+    
+    // Extra Credit 1, 2
+    // function message({children}) {
+    //   return <div className="message">{children}</div>
+    // }
+    // const Message = (
+    //   <div className="container">
+    //     {React.createElement(message, {children: "Hello World"})}
+    //     {React.createElement(message, {children: "Goodbye World"})}
+    //   </div>
+    // )
+
+    // Extra Credit 3
+    function Message({subject, greeting}) {
+      return (
+        <div className="message">
+          {greeting}, {subject}
+        </div>
+      )
+    }
+
+    // Prop Types to validate what is passed in
+    // const PropTypes = {
+    //   string(props, propName, componentName) {
+    //     if (typeof props[propName] !== "string") {
+    //       return new Error("Must pass in a string")
+    //     }
+    //     if (props[propName].length <= 0) {
+    //       return new Error ("Must pass a string of length > 0")
+    //     }
+    //   }
+    // }
+
+    // Message.propTypes = {
+    //   subject: PropTypes.string,
+    //   greeting: PropTypes.string
+    // }
+
+    // Extra Credit 4, use prop-types library
+    Message.propTypes = {
+      subject: PropTypes.string.isRequired,
+      greeting: PropTypes.string.isRequired
+    }
+
     const element = (
       <div className="container">
-        <div className="message">Hello World</div>
-        <div className="message">Goodbye World</div>
+        <Message greeting="Hello" subject="World" />
+        <Message greeting="Goodbye" subject="World" />
       </div>
     )
 
+    // const elementWithErrors = (
+    //   <div className="container">
+    //     <Message greeting="" subject={2} />
+    //     <Message greeting={null} subject="World" />
+    //   </div>
+    // )
+    // Result:
+    // Warning: Failed prop type: Must pass in a string
+    // Warning: Failed prop type: Must pass a string of length > 0
+
+    // Note these show up as warnings, but it still tries to render. E.g. the output on the screen is still showing as the following even though there are console warnings:
+    // , 2
+    // Goodbye, World
+
+    // Note these also still show up as warnings even if not attempting to render (e.g. if we pass element to render instead of elementWithErrors).
+
+    // Extra Credit 5, use fragment
+    const elementWithFragment = (
+      <>
+        <Message greeting="Hello" subject="World" />
+        <Message greeting="Goodbye" subject="World" />
+      </>
+    )
+
     // 💯 This is only the first step to making actual React components. The rest is in the extra credit!
-    ReactDOM.createRoot(document.getElementById('root')).render(element)
+    ReactDOM.createRoot(document.getElementById('root')).render(elementWithFragment)
   </script>
 </body>
